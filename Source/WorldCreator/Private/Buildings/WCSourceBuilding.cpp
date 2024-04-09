@@ -2,7 +2,7 @@
 
 #include "Buildings/WCSourceBuilding.h"
 
-void AWCSourceBuilding::BeginPlay() 
+void AWCSourceBuilding::BeginPlay()
 {
     Super::BeginPlay();
 

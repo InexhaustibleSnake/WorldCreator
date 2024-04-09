@@ -5,15 +5,18 @@
 
 AWCBaseBuilding::AWCBaseBuilding()
 {
-	PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = false;
 
     BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>("BuildingMesh");
+    BuildingMesh->SetGenerateOverlapEvents(false);
     SetRootComponent(BuildingMesh);
 
     ResourcesAmountText = CreateDefaultSubobject<UTextRenderComponent>("ResourcesAmountText");
     ResourcesAmountText->SetupAttachment(GetRootComponent());
 
     ResourcesAmountText->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+
+    SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 }
 
 void AWCBaseBuilding::BeginPlay()
@@ -30,7 +33,7 @@ void AWCBaseBuilding::SetResourcesText(const FText& Text)
     ResourcesAmountText->SetText(Text);
 }
 
-void AWCBaseBuilding::SetResources(float Amount) 
+void AWCBaseBuilding::SetResources(float Amount)
 {
     Resources = Amount;
 

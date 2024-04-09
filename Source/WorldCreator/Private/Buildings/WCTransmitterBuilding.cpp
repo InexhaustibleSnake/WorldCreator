@@ -15,11 +15,16 @@ void AWCTransmitterBuilding::BeginPlay()
 
 AWCBaseBuilding* AWCTransmitterBuilding::GetNearestBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass) const
 {
+    float Distance = 0.0f;
+
     TArray<AActor*> FoundActors;
 
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), BuildingClass, FoundActors);
 
-    float Distance = 0.0f;
+    if (FoundActors.Contains(this))  // If you don't remove this from the array, the function will output this as the nearest building
+    {
+        FoundActors.RemoveAt(FoundActors.IndexOfByKey(this));
+    }
 
     return Cast<AWCBaseBuilding>(UGameplayStatics::FindNearestActor(GetActorLocation(), FoundActors, Distance));
 }

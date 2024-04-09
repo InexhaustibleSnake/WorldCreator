@@ -26,7 +26,7 @@ protected:
     float ResourcesToTakeRate = 1.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Transmitter")
-    TSubclassOf<AWCBaseBuilding> TargetBuildingClass;
+    TSubclassOf<AWCBaseBuilding> TargetBuildingClass = AWCBaseBuilding::StaticClass();
 
     UPROPERTY()
     AWCBaseBuilding* TargetBuilding;

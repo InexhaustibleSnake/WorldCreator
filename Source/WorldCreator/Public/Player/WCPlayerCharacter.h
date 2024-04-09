@@ -7,6 +7,7 @@
 #include "WCPlayerCharacter.generated.h"
 
 class UCameraComponent;
+class AWCBaseBuilding;
 
 UCLASS()
 class WORLDCREATOR_API AWCPlayerCharacter : public ACharacter
@@ -24,6 +25,18 @@ protected:
     void MoveForward(float Amount);
     void MoveRight(float Amount);
 
+    void CreateBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass);
+
+    void MakeTrace(const FVector& ViewLocation, const FRotator& ViewRotation, FHitResult& HitResult);
+
+    bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation);
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
     UCameraComponent* MainCamera;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WCPlayerCharacter")
+    TMap<FName, TSubclassOf<AWCBaseBuilding>> PlayerBuildActionsData;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WCPlayerCharacter")
+    float SpawnTraceDistance = 2000.0f;
 };
