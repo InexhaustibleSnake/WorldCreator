@@ -12,12 +12,13 @@ class WORLDCREATOR_API AWCTransmitterBuilding : public AWCBaseBuilding
     GENERATED_BODY()
 
 public:
+    AWCTransmitterBuilding();
 
     UFUNCTION(BlueprintCallable, Category = "Transmitter")
     AWCBaseBuilding* GetNearestBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass) const;
 
     UFUNCTION(BlueprintCallable, Category = "Transmitter")
-    void SetTargetGBuilding(AWCBaseBuilding* Building) { TargetBuilding = Building; }
+    void SetTargetBuilding(AWCBaseBuilding* Building);
 
 protected:
     virtual void BeginPlay() override;
@@ -33,6 +34,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Transmitter")
     TSubclassOf<AWCBaseBuilding> TargetBuildingClass = AWCBaseBuilding::StaticClass();
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+    UStaticMeshComponent* ArrowMesh;
 
     UPROPERTY()
     AWCBaseBuilding* TargetBuilding;

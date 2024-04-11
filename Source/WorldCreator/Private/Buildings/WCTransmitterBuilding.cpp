@@ -3,11 +3,17 @@
 #include "Buildings/WCTransmitterBuilding.h"
 #include "EngineUtils.h"
 
+AWCTransmitterBuilding::AWCTransmitterBuilding() 
+{
+    ArrowMesh = CreateDefaultSubobject<UStaticMeshComponent>("ArrowMesh");
+    ArrowMesh->SetupAttachment(GetRootComponent());
+}
+
 void AWCTransmitterBuilding::BeginPlay()
 {
     Super::BeginPlay();
 
-    TargetBuilding = GetNearestBuilding(TargetBuildingClass);
+    SetTargetBuilding(GetNearestBuilding(TargetBuildingClass));
 
     BuildingTimerDelegate.BindUFunction(this, FName("TakeResourcesFromBuilding"), ResourcesToTakeAmount, TargetBuilding);
     GetWorldTimerManager().SetTimer(BuildingTimer, BuildingTimerDelegate, ResourcesToTakeRate, true);
@@ -32,6 +38,19 @@ AWCBaseBuilding* AWCTransmitterBuilding::GetNearestBuilding(const TSubclassOf<AW
     }
 
     return NearestBuilding;
+}
+
+void AWCTransmitterBuilding::SetTargetBuilding(AWCBaseBuilding* Building)
+{
+    if (!Building || Building == this) return;
+
+    TargetBuilding = Building;
+
+    if (ArrowMesh)
+    {
+        FVector DifferenceVector = Building->GetActorLocation() - ArrowMesh->GetComponentLocation();
+        ArrowMesh->SetWorldRotation(DifferenceVector.Rotation());
+    }
 }
 
 void AWCTransmitterBuilding::TakeResourcesFromBuilding(float Amount, AWCBaseBuilding* TargetBuildingReference)
