@@ -6,12 +6,19 @@ User can build buildings and "switch levels"
 
 
 Control:
+
 Mouse - Spin the camera
+
 WASD - Walk
+
 Q - Previous level
+
 E - Next level
+
 1 - Build Source Building 
+
 2 - Build Transmitter Building
+
 3 - Build Portal Building
 
 Changing worlds:
