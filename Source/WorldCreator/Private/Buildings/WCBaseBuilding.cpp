@@ -23,7 +23,9 @@ void AWCBaseBuilding::BeginPlay()
 {
     Super::BeginPlay();
 
-    SetResourcesText(FText::FromString(FString::SanitizeFloat(Resources)));
+    OnResourcesAmountChanged.AddDynamic(this, &AWCBaseBuilding::OnResourcesChanged);
+
+    SetResourcesText(FText::FromString(FString::SanitizeFloat(GetResourcesAmount())));
 }
 
 void AWCBaseBuilding::SetResourcesText(const FText& Text)
@@ -33,11 +35,16 @@ void AWCBaseBuilding::SetResourcesText(const FText& Text)
     ResourcesAmountText->SetText(Text);
 }
 
+void AWCBaseBuilding::OnResourcesChanged(float NewResources)
+{
+    SetResourcesText(FText::FromString(FString::SanitizeFloat(NewResources)));
+}
+
 void AWCBaseBuilding::SetResources(float Amount)
 {
     Resources = Amount;
 
-    SetResourcesText(FText::FromString(FString::SanitizeFloat(Resources)));
+    OnResourcesAmountChanged.Broadcast(Resources);
 }
 
 void AWCBaseBuilding::RemoveResources(float Amount)

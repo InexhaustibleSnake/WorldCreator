@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WCBaseBuilding.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnResourcesAmountChanged, float, NewResources);
+
 class UTextRenderComponent;
 
 UCLASS()
@@ -17,22 +19,28 @@ public:
     AWCBaseBuilding();
 
     UFUNCTION(BlueprintCallable, Category = "Buildings")
-    void SetResources(float Amount);
+    virtual void SetResources(float Amount);
     float GetResourcesAmount() { return Resources; }
 
     float GetMaxResourcesAmount() { return MaxResources; }
 
     void RemoveResources(float Amount);
 
-    void AddResources(float Amount);
+    virtual void AddResources(float Amount);
 
     void SetIsLoaded(bool Loaded) { IsLoaded = Loaded; }
     bool GetIsLoaded() const { return IsLoaded; }
+
+    UPROPERTY(BlueprintAssignable)
+    FOnResourcesAmountChanged OnResourcesAmountChanged;
 
 protected:
     virtual void BeginPlay() override;
 
     void SetResourcesText(const FText& Text);
+
+    UFUNCTION()
+    void OnResourcesChanged(float NewResources);
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
     UStaticMeshComponent* BuildingMesh;
