@@ -3,7 +3,7 @@
 #include "Buildings/WCTransmitterBuilding.h"
 #include "EngineUtils.h"
 
-AWCTransmitterBuilding::AWCTransmitterBuilding() 
+AWCTransmitterBuilding::AWCTransmitterBuilding()
 {
     ArrowMesh = CreateDefaultSubobject<UStaticMeshComponent>("ArrowMesh");
     ArrowMesh->SetupAttachment(GetRootComponent());
@@ -27,7 +27,7 @@ AWCBaseBuilding* AWCTransmitterBuilding::GetNearestBuilding(const TSubclassOf<AW
 
     for (TActorIterator<AWCBaseBuilding> OneBuilding(GetWorld()); OneBuilding; ++OneBuilding)
     {
-        if (!*OneBuilding || *OneBuilding == this|| !OneBuilding->GetIsLoaded()) continue;
+        if (!*OneBuilding || *OneBuilding == this || !OneBuilding->GetIsLoaded()) continue;
 
         const float DistanceFromActorToCheck = (GetActorLocation() - OneBuilding->GetActorLocation()).SizeSquared();
         if (DistanceFromActorToCheck < DistanceFromNearestActor)

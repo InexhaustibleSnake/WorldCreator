@@ -11,11 +11,10 @@ void AWCPortalBuilding::BeginPlay()
     SetResourcesText(FText::FromString(FString::SanitizeFloat(TotalResources)));
 }
 
-void AWCPortalBuilding::AddResources(float Amount) 
+void AWCPortalBuilding::AddResources(float Amount)
 {
     SetTotalResources(GetTotalResources() + Amount);
 }
-
 
 void AWCPortalBuilding::SetTotalResources(float NewTotalResources)
 {

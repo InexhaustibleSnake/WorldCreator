@@ -44,42 +44,43 @@ void UWCLevelManagerComponent::SaveLevelData(int32 LevelIndex)
         FoundBuildings.Add(*OneBuilding);
     }
 
-    FBuildings Buildings;
-    Buildings.SetBuildingsInLevel(FoundBuildings);
-
-    if (LevelsData.Contains(LevelIndex))
+    if (LevelsData.IsValidIndex(LevelIndex))
     {
-        SetLevelData(LevelIndex, Buildings);
+        LevelsData[LevelIndex].SetBuildingsInLevel(FoundBuildings);
     }
     else
     {
-        LevelsData.Add(LevelIndex, Buildings);
+        FBuildings Buildings;
+        Buildings.SetBuildingsInLevel(FoundBuildings);
+        LevelsData.Add(Buildings);
     }
 }
 
 void UWCLevelManagerComponent::LoadAllBuildingsInLevel(int32 LevelIndex)
 {
-    if (!GetWorld()) return;
+    if (!GetWorld() || !LevelsData.IsValidIndex(LevelIndex)) return;
 
-    for (auto OneBuilding : LevelsData.FindRef(LevelIndex).GetBuildingsInLevel())
+    for (auto OneBuilding : LevelsData[LevelIndex].GetBuildingsInLevel())
     {
         if (!OneBuilding || OneBuilding->GetIsLoaded()) continue;
 
         OneBuilding->SetActorHiddenInGame(false);
         OneBuilding->SetIsLoaded(true);
+        OneBuilding->SetActorEnableCollision(true);
     }
 }
 
 void UWCLevelManagerComponent::UnloadAllBuildingsInLevel(int32 LevelIndex)
 {
-    if (!GetWorld()) return;
+    if (!GetWorld() || !LevelsData.IsValidIndex(LevelIndex)) return;
 
-    for (auto OneBuilding : LevelsData.FindRef(LevelIndex).GetBuildingsInLevel())
+    for (auto OneBuilding : LevelsData[LevelIndex].GetBuildingsInLevel())
     {
         if (!OneBuilding || !OneBuilding->GetIsLoaded()) continue;
 
         OneBuilding->SetActorHiddenInGame(true);
         OneBuilding->SetIsLoaded(false);
+        OneBuilding->SetActorEnableCollision(false);
     }
 }
 
@@ -88,7 +89,7 @@ void UWCLevelManagerComponent::SetLevelData(int32 LevelIndex, const FBuildings& 
     LevelsData[LevelIndex] = Buildings;
 }
 
-void UWCLevelManagerComponent::SetCurrentLevelIndex(int32 Index) 
+void UWCLevelManagerComponent::SetCurrentLevelIndex(int32 Index)
 {
     CurrentLevelIndex = FMath::Clamp(Index, 0, LevelsData.Num());
     OnLevelIndexChanged.Broadcast(CurrentLevelIndex);

@@ -55,5 +55,5 @@ protected:
     int32 CurrentLevelIndex = 0;
 
     UPROPERTY()
-    TMap<int32, FBuildings> LevelsData;
+    TArray<FBuildings>LevelsData;
 };
