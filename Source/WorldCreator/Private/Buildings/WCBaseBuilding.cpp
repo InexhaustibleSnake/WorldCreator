@@ -58,3 +58,11 @@ void AWCBaseBuilding::AddResources(float Amount)
     float FinalResources = FMath::Clamp(Resources + Amount, 0.0f, MaxResources);
     SetResources(FinalResources);
 }
+
+void AWCBaseBuilding::SetIsLoaded(bool Loaded) 
+{
+    IsLoaded = Loaded;
+
+    SetActorHiddenInGame(!IsLoaded);
+    SetActorEnableCollision(IsLoaded);
+}

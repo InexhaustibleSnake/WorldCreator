@@ -13,22 +13,22 @@ void UWCLevelManagerComponent::NextLevel()
 {
     SaveLevelData(CurrentLevelIndex);
 
-    UnloadAllBuildingsInLevel(CurrentLevelIndex);
+    SetIsBuildingInLevelLoaded(CurrentLevelIndex, false);
 
     SetCurrentLevelIndex(++CurrentLevelIndex);
 
-    LoadAllBuildingsInLevel(CurrentLevelIndex);
+    SetIsBuildingInLevelLoaded(CurrentLevelIndex, true);
 }
 
 void UWCLevelManagerComponent::PreviousLevel()
 {
     SaveLevelData(CurrentLevelIndex);
 
-    UnloadAllBuildingsInLevel(CurrentLevelIndex);
+    SetIsBuildingInLevelLoaded(CurrentLevelIndex, false);
 
     SetCurrentLevelIndex(--CurrentLevelIndex);
 
-    LoadAllBuildingsInLevel(CurrentLevelIndex);
+    SetIsBuildingInLevelLoaded(CurrentLevelIndex, true);
 }
 
 void UWCLevelManagerComponent::SaveLevelData(int32 LevelIndex)
@@ -56,31 +56,15 @@ void UWCLevelManagerComponent::SaveLevelData(int32 LevelIndex)
     }
 }
 
-void UWCLevelManagerComponent::LoadAllBuildingsInLevel(int32 LevelIndex)
+void UWCLevelManagerComponent::SetIsBuildingInLevelLoaded(int32 LevelIndex, bool IsLoaded)
 {
     if (!GetWorld() || !LevelsData.IsValidIndex(LevelIndex)) return;
 
     for (auto OneBuilding : LevelsData[LevelIndex].GetBuildingsInLevel())
     {
-        if (!OneBuilding || OneBuilding->GetIsLoaded()) continue;
+        if (!OneBuilding || OneBuilding->GetIsLoaded() == IsLoaded) continue;
 
-        OneBuilding->SetActorHiddenInGame(false);
-        OneBuilding->SetIsLoaded(true);
-        OneBuilding->SetActorEnableCollision(true);
-    }
-}
-
-void UWCLevelManagerComponent::UnloadAllBuildingsInLevel(int32 LevelIndex)
-{
-    if (!GetWorld() || !LevelsData.IsValidIndex(LevelIndex)) return;
-
-    for (auto OneBuilding : LevelsData[LevelIndex].GetBuildingsInLevel())
-    {
-        if (!OneBuilding || !OneBuilding->GetIsLoaded()) continue;
-
-        OneBuilding->SetActorHiddenInGame(true);
-        OneBuilding->SetIsLoaded(false);
-        OneBuilding->SetActorEnableCollision(false);
+        OneBuilding->SetIsLoaded(IsLoaded);
     }
 }
 

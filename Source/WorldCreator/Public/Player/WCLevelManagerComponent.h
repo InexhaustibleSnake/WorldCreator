@@ -41,8 +41,7 @@ public:
 protected:
     void SaveLevelData(int32 LevelIndex);
 
-    void LoadAllBuildingsInLevel(int32 LevelIndex);
-    void UnloadAllBuildingsInLevel(int32 LevelIndex);
+    void SetIsBuildingInLevelLoaded(int32 LevelIndex, bool IsLoaded);
 
     void SetLevelData(int32 LevelIndex, const FBuildings& Buildings);
 

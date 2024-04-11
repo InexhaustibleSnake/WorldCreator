@@ -28,7 +28,7 @@ public:
 
     virtual void AddResources(float Amount);
 
-    void SetIsLoaded(bool Loaded) { IsLoaded = Loaded; }
+    void SetIsLoaded(bool Loaded);
     bool GetIsLoaded() const { return IsLoaded; }
 
     UPROPERTY(BlueprintAssignable)
