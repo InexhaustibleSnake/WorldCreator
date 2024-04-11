@@ -16,13 +16,18 @@ class WORLDCREATOR_API AWCBaseBuilding : public AActor
 public:
     AWCBaseBuilding();
 
+    UFUNCTION(BlueprintCallable, Category = "Buildings")
+    void SetResources(float Amount);
     float GetResourcesAmount() { return Resources; }
 
-    void SetResources(float Amount);
+    float GetMaxResourcesAmount() { return MaxResources; }
 
     void RemoveResources(float Amount);
 
     void AddResources(float Amount);
+
+    void SetIsLoaded(bool Loaded) { IsLoaded = Loaded; }
+    bool GetIsLoaded() const { return IsLoaded; }
 
 protected:
     virtual void BeginPlay() override;
@@ -35,9 +40,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
     UTextRenderComponent* ResourcesAmountText;
 
-    UPROPERTY(BlueprintReadOnly, Category = "Resources")
+    UPROPERTY()
     float Resources = 0.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Resources", meta = (ClampMin = "0.0", ClampMax = "1000000.0"))
     float MaxResources = 100.0f;
+
+    UPROPERTY()
+    bool IsLoaded = true;
 };

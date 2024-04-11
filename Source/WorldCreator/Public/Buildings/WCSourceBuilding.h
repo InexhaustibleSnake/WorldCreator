@@ -11,6 +11,7 @@ class WORLDCREATOR_API AWCSourceBuilding : public AWCBaseBuilding
 {
     GENERATED_BODY()
 
-protected:
-    virtual void BeginPlay() override;
+public:
+    AWCSourceBuilding();
+
 };

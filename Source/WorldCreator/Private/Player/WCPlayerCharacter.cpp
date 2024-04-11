@@ -4,6 +4,7 @@
 #include "Camera/CameraComponent.h"
 #include "Buildings/WCBaseBuilding.h"
 #include "Buildings/WCSourceBuilding.h"
+#include "Player/WCLevelManagerComponent.h"
 
 AWCPlayerCharacter::AWCPlayerCharacter()
 {
@@ -11,6 +12,8 @@ AWCPlayerCharacter::AWCPlayerCharacter()
 
     MainCamera = CreateDefaultSubobject<UCameraComponent>("MainCamera");
     MainCamera->SetupAttachment(GetRootComponent());
+
+    WCLevelManagerComponent = CreateDefaultSubobject<UWCLevelManagerComponent>("WCLevelManagerComponent");
 
     bUseControllerRotationPitch = true;
 }
@@ -40,6 +43,9 @@ void AWCPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
         ActionBinding.ActionDelegate.GetDelegateForManualSet().BindLambda([&, OneAction]() { CreateBuilding(OneAction.Value); });
         PlayerInputComponent->AddActionBinding(ActionBinding);
     }
+
+    PlayerInputComponent->BindAction("NextLevel", IE_Pressed, this, &AWCPlayerCharacter::NextLevel);
+    PlayerInputComponent->BindAction("PreviousLevel", IE_Pressed, this, &AWCPlayerCharacter::PreviousLevel);
 }
 
 void AWCPlayerCharacter::MoveForward(float Amount)
@@ -91,4 +97,18 @@ bool AWCPlayerCharacter::GetPlayerViewPoint(FVector& ViewLocation, FRotator& Vie
     PlayerController->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
     return true;
+}
+
+void AWCPlayerCharacter::NextLevel()
+{
+    if (!WCLevelManagerComponent) return;
+
+    WCLevelManagerComponent->NextLevel();
+}
+
+void AWCPlayerCharacter::PreviousLevel()
+{
+    if (!WCLevelManagerComponent) return;
+
+    WCLevelManagerComponent->PreviousLevel();
 }

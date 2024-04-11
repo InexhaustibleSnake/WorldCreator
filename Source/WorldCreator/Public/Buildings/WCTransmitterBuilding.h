@@ -11,10 +11,16 @@ class WORLDCREATOR_API AWCTransmitterBuilding : public AWCBaseBuilding
 {
     GENERATED_BODY()
 
+public:
+
+    UFUNCTION(BlueprintCallable, Category = "Transmitter")
+    AWCBaseBuilding* GetNearestBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass) const;
+
+    UFUNCTION(BlueprintCallable, Category = "Transmitter")
+    void SetTargetGBuilding(AWCBaseBuilding* Building) { TargetBuilding = Building; }
+
 protected:
     virtual void BeginPlay() override;
-
-    AWCBaseBuilding* GetNearestBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass) const;
 
     UFUNCTION()
     void TakeResourcesFromBuilding(float Amount, AWCBaseBuilding* TargetBuildingReference);

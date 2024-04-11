@@ -2,9 +2,7 @@
 
 #include "Buildings/WCSourceBuilding.h"
 
-void AWCSourceBuilding::BeginPlay()
+AWCSourceBuilding::AWCSourceBuilding()
 {
-    Super::BeginPlay();
-
-    SetResources(MaxResources);
+    Resources = MaxResources;
 }

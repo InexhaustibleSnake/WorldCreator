@@ -1,7 +1,7 @@
 // The project was made for a technical assignment
 
 #include "Buildings/WCTransmitterBuilding.h"
-#include "Kismet/GameplayStatics.h"
+#include "EngineUtils.h"
 
 void AWCTransmitterBuilding::BeginPlay()
 {
@@ -15,18 +15,23 @@ void AWCTransmitterBuilding::BeginPlay()
 
 AWCBaseBuilding* AWCTransmitterBuilding::GetNearestBuilding(const TSubclassOf<AWCBaseBuilding>& BuildingClass) const
 {
-    float Distance = 0.0f;
+    AWCBaseBuilding* NearestBuilding = nullptr;
 
-    TArray<AActor*> FoundActors;
+    float DistanceFromNearestActor = TNumericLimits<float>::Max();
 
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), BuildingClass, FoundActors);
-
-    if (FoundActors.Contains(this))  // If you don't remove this from the array, the function will output this as the nearest building
+    for (TActorIterator<AWCBaseBuilding> OneBuilding(GetWorld()); OneBuilding; ++OneBuilding)
     {
-        FoundActors.RemoveAt(FoundActors.IndexOfByKey(this));
+        if (!*OneBuilding || *OneBuilding == this|| !OneBuilding->GetIsLoaded()) continue;
+
+        const float DistanceFromActorToCheck = (GetActorLocation() - OneBuilding->GetActorLocation()).SizeSquared();
+        if (DistanceFromActorToCheck < DistanceFromNearestActor)
+        {
+            NearestBuilding = *OneBuilding;
+            DistanceFromNearestActor = DistanceFromActorToCheck;
+        }
     }
 
-    return Cast<AWCBaseBuilding>(UGameplayStatics::FindNearestActor(GetActorLocation(), FoundActors, Distance));
+    return NearestBuilding;
 }
 
 void AWCTransmitterBuilding::TakeResourcesFromBuilding(float Amount, AWCBaseBuilding* TargetBuildingReference)
@@ -38,6 +43,7 @@ void AWCTransmitterBuilding::TakeResourcesFromBuilding(float Amount, AWCBaseBuil
     }
 
     float TargetBuildingResources = TargetBuilding->GetResourcesAmount();
+
     if (FMath::IsNearlyZero(TargetBuildingResources))
     {
         GetWorldTimerManager().ClearTimer(BuildingTimer);

@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class AWCBaseBuilding;
+class UWCLevelManagerComponent;
 
 UCLASS()
 class WORLDCREATOR_API AWCPlayerCharacter : public ACharacter
@@ -31,8 +32,14 @@ protected:
 
     bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation);
 
+    void NextLevel();
+    void PreviousLevel();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
     UCameraComponent* MainCamera;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+    UWCLevelManagerComponent* WCLevelManagerComponent;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "WCPlayerCharacter")
     TMap<FName, TSubclassOf<AWCBaseBuilding>> PlayerBuildActionsData;
